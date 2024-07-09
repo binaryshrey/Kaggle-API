@@ -1,5 +1,8 @@
-import logging
+import logging, json, requests
 from fastapi import FastAPI
+from utils.schemas import UserProfile
+from utils.configs import PROFILE_URL, headers
+
 
 app = FastAPI()
 
@@ -22,4 +25,28 @@ app = FastAPI(
 @app.get("/")
 async def root():
     return {"message": "Hello Kaggle!"}
+
+
+@app.post("/user-profile")
+async def get_user_profile(user_profile : UserProfile):
+
+    try:
+        payload = {
+            "relativeUrl": f"/{user_profile.user_profile_name}"
+        }
+
+        response = requests.post(PROFILE_URL, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            logger.info(f"PROFILE : {user_profile.user_profile_name} : success!")
+            json_response = json.loads(response.text).get("userProfile")
+            del json_response["usersFollowingMe"]
+            return json_response
+        else:
+            logger.error(f"PROFILE : {user_profile.user_profile_name} : failed with {response.status_code} : {response.content} !")
+            return {}
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"PROFILE : {user_profile.user_profile_name} : failed with {e}")
+        return {}
 
