@@ -14,6 +14,7 @@ def env_get(env_var: str) -> str:
 
 
 PROFILE_URL = env_get("PROFILE_URL")
+PROFILE_ACTIVITY_URL = env_get("PROFILE_ACTIVITY_URL")
 COOKIE = env_get("COOKIE")
 X_Kaggle_Build_Version = env_get("X_Kaggle_Build_Version")
 X_Xsrf_Token = env_get("X_Xsrf_Token")
