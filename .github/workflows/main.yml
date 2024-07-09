@@ -1,0 +1,13 @@
+name: Kaggle-Keep-Alive-Service
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+
+jobs:
+  ping-service:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Curl Request to Ping Service
+        run: curl -sSf https://kaggle-api.onrender.com/
